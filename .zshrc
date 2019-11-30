@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/eurekaqq/.oh-my-zsh
+export ZSH=/home/eurekaqq/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -83,3 +83,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+# conda
+export PATH="/home/eurekaqq/anaconda3/bin:$PATH"
+
+#alias
+alias nv="watch -n 5 nvidia-smi"
