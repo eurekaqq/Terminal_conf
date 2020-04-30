@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/home/eurekaqq/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -49,7 +49,13 @@ ZSH_THEME="af-magic-modified"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(
+	git 
+	zsh-z 
+	extract 
+	zsh-autosuggestions 
+	zsh-syntax-highlighting
+)
 
 # User configuration
 
@@ -83,8 +89,3 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# conda
-export PATH="/home/eurekaqq/anaconda3/bin:$PATH"
-
-#alias
-alias nv="watch -n 5 nvidia-smi"
