@@ -3,12 +3,21 @@ filetype off
 filetype plugin indent on
 set encoding=utf-8
 set autoindent smartindent
+" show line number
 set number
+set relativenumber
+
 set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 syntax on
 set cursorline
 set shiftround
 set splitbelow splitright
+" share clipboard with system
+set clipboard=unnamed
+
+" set js indent
+autocmd Filetype jade set sw=2 ts=2 sts=2 expandtab
+autocmd Filetype javascript set sw=2 ts=2 sts=2 expandtab
 
 " fix some Unicode word
 set ambiwidth=double
@@ -16,13 +25,12 @@ set ambiwidth=double
 " for insert mode
 inoremap <S-Tab> <C-d>
 
-" fix mac backspace
+" fix macos backspace
 set backspace=indent,eol,start
 
 " spell check
 set spell spelllang=en_us
-autocmd FileType gitcommit setlocal spell
-autocmd BufRead,BufNewFile *.py setlocal spell
+autocmd FileType gitcommit,markdown setlocal spell
 
 " set column at 80
 set colorcolumn=80
@@ -47,6 +55,9 @@ nnoremap <silent><Esc><Esc> :<C-u>set nohlsearch!<CR>
 " show status bar
 set laststatus=2
 
+" create file in current dir
+set autochdir 
+
 " set the runtime path to include Vundle and initialize
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -57,18 +68,21 @@ endif
 call plug#begin('~/.vim/plugged')
 " auto closing of quotes
 Plug 'Raimondi/delimitMate'
-Plug 'kien/ctrlp.vim'
-Plug 'tomasr/molokai'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-Plug 'mattn/vim-lsp-settings'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/vim-lsp'
+" ctrlp search files
+Plug 'ctrlpvim/ctrlp.vim'
 " cntlP find function
 Plug 'tacahiroy/ctrlp-funky'
+" vim theme
+Plug 'nanotech/jellybeans.vim'
+" airline status bar
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" lsp
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'mattn/vim-lsp-settings'
 " show indent line
 Plug 'Yggdroot/indentLine'
 " auto pep8
@@ -79,25 +93,33 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 " make repeat do more things
 Plug 'tpope/vim-repeat'
-Plug 'vim-scripts/ReplaceWithRegister'
 call plug#end()
 
 " vim theme
-colorscheme molokai
+colorscheme jellybeans
 
-" airline theme
-let g:airline_theme='bubblegum'
+" airline setting
+let g:airline_theme='jellybeans'
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_tab_nr = 1
+let g:airline#extensions#tabline#tab_nr_type = 1
+let g:airline#extensions#tabline#current_first = 1
+let g:airline#extensions#tabline#buffers_label = 'b'
+let g:airline_detect_spell=0
 
 " lsp auto input by tab
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
 " lsp shortcut mapping
 nnoremap <buffer> gd :<C-u>LspDefinition<CR>
 nnoremap <buffer> gD :<C-u>LspReferences<CR>
-nnoremap <buffer> <F2> :<C-u>LspRename<CR>
+nnoremap <buffer> gn :<C-u>LspRename<CR>
+
+" lsp show message
+let g:lsp_diagnostics_echo_cursor=1
+let g:lsp_diagnostics_echo_delay=200
 
 " control+p setting
 let g:ctrlp_prompt_mappings = {
@@ -117,3 +139,4 @@ let g:autopep8_disable_show_diff=1
 " indent line show leading space
 let g:indentLine_leadingSpaceChar='-'
 let g:indentLine_leadingSpaceEnabled='1'
+let g:indentLine_fileTypeExclude = ['json', 'text', 'markdown']
