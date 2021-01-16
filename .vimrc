@@ -1,5 +1,5 @@
 set nocompatible
-filetype off     
+filetype off
 filetype plugin indent on
 set encoding=utf-8
 set autoindent smartindent
@@ -38,6 +38,8 @@ set colorcolumn=80
 " show space in line end
 highlight WhitespaceEOL ctermbg=red guibg=red
 match WhitespaceEOL /\s\+$/
+" Remove extra trailling spaces
+autocmd BufWritePre * :%s/\s\+$//e
 
 " disable backup file
 set nowritebackup
@@ -50,15 +52,18 @@ set ignorecase
 set smartcase
 set hlsearch
 " double tap esc to disable highlight
-nnoremap <silent><Esc><Esc> :<C-u>set nohlsearch!<CR> 
+nnoremap <silent><Esc><Esc> :<C-u>set nohlsearch!<CR>
+" Highlight the occurance of current word, use following command to select color
+" :so $VIMRUNTIME/syntax/hitest.vim
+autocmd CursorMoved * exe printf('match VisualNOS /\V\<%s\>/', escape(expand('<cword>'), '/\'))
 
 " show status bar
 set laststatus=2
 
 " create file in current dir
-set autochdir 
+set autochdir
 
-" set the runtime path to include Vundle and initialize
+" set the runtime path to include vim-plug and initialize
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
         \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -85,11 +90,9 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'mattn/vim-lsp-settings'
 " show indent line
 Plug 'Yggdroot/indentLine'
-" auto pep8
-Plug 'tell-k/vim-autopep8'
 " git blame
 Plug 'tpope/vim-fugitive'
-" handling quote and closing 
+" handling quote and closing
 Plug 'tpope/vim-surround'
 " make repeat do more things
 Plug 'tpope/vim-repeat'
@@ -104,7 +107,8 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_tab_nr = 1
 let g:airline#extensions#tabline#tab_nr_type = 1
 let g:airline#extensions#tabline#current_first = 1
-let g:airline#extensions#tabline#buffers_label = 'b'
+let g:airline#extensions#tabline#buffers_label = ''
+let g:airline#extensions#tabline#tabs_label = ''
 let g:airline_detect_spell=0
 
 " lsp auto input by tab
@@ -121,6 +125,9 @@ nnoremap <buffer> gn :<C-u>LspRename<CR>
 let g:lsp_diagnostics_echo_cursor=1
 let g:lsp_diagnostics_echo_delay=200
 
+" format file when save by lsp
+autocmd BufWritePre <buffer> LspDocumentFormatSync
+
 " control+p setting
 let g:ctrlp_prompt_mappings = {
     \ 'AcceptSelection("e")': ['<c-t>'],
@@ -131,10 +138,6 @@ let g:ctrlp_show_hidden = 1
 let g:ctrlp_types = ['fil']
 let g:ctrlp_extensions = ['funky']
 let g:ctrlp_funky_matchtype = 'path'
-
-" run autopep8 when save
-let g:autopep8_on_save = 1
-let g:autopep8_disable_show_diff=1
 
 " indent line show leading space
 let g:indentLine_leadingSpaceChar='-'
