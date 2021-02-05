@@ -133,6 +133,8 @@ inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 nnoremap <buffer> gd :<C-u>LspDefinition<CR>
 nnoremap <buffer> gD :<C-u>LspReferences<CR>
 command Rn LspRename
+command Lne LspNextError
+command Lnw LspNextWarning
 
 " lsp preview window
 let g:lsp_preview_max_width = 60
