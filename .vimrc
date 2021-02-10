@@ -166,7 +166,6 @@ let g:ctrlp_types = ['fil']
 let g:ctrlp_extensions = ['funky']
 " ctrlP funky
 let g:ctrlp_funky_matchtype = 'path'
-let g:ctrlp_funky_syntax_highlight = 1
 let g:ctrlp_funky_use_cache = 1
 
 " indent line show leading space
