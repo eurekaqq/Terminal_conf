@@ -7,11 +7,12 @@ set shiftwidth=4 tabstop=4 softtabstop=4 expandtab
 
 " set js indent
 autocmd Filetype jade set sw=2 ts=2 sts=2 expandtab
+autocmd Filetype typescript set sw=2 ts=2 sts=2 expandtab
 autocmd Filetype javascript set sw=2 ts=2 sts=2 expandtab
+autocmd Filetype proto set sw=2 ts=2 sts=2 expandtab
 
 " show line number
 set number
-set relativenumber
 
 syntax on
 set cursorline
@@ -26,20 +27,14 @@ set ambiwidth=double
 " for insert mode
 inoremap <S-Tab> <C-d>
 
-" fix macos backspace
+" fix Mac OS backspace
 set backspace=indent,eol,start
 
 " spell check
 set spell spelllang=en_us
 autocmd FileType gitcommit,markdown setlocal spell
 
-" set column at 80
-set colorcolumn=80
-
-" show space in line end
-highlight WhitespaceEOL ctermbg=red guibg=red
-match WhitespaceEOL /\s\+$/
-" Remove extra trailling spaces
+" Remove extra trailing spaces
 autocmd BufWritePre * :%s/\s\+$//e
 
 " disable backup file
@@ -52,13 +47,13 @@ set incsearch
 set ignorecase
 set smartcase
 set hlsearch
-" double tap esc to disable highlight
+" double tap Esc key to disable highlight
 nnoremap <silent><Esc><Esc> :<C-u>set nohlsearch!<CR>
-" Highlight the occurance of current word, use following command to select color
+" Highlight the occurrence of current word, use following command to select color
 " :so $VIMRUNTIME/syntax/hitest.vim
 autocmd CursorMoved * exe printf('match VisualNOS /\V\<%s\>/', escape(expand('<cword>'), '/\'))
 
-" delete without overwrite clipboard
+" don't overwrite clipboard when delete char
 nnoremap x "_x
 nnoremap d "_d
 nnoremap D "_D
@@ -67,7 +62,7 @@ nnoremap <leader>d ""d
 nnoremap <leader>D ""D
 vnoremap <leader>d ""d
 
-" swap two line use Ctrl + jk
+" swap two line by using Ctrl + jk
 nnoremap <C-k> :m .-2<CR>==
 nnoremap <C-j> :m .+1<CR>==
 inoremap <C-j> <Esc>:m .+1<CR>==gi
@@ -121,7 +116,10 @@ let g:airline#extensions#tabline#current_first = 1
 let g:airline#extensions#tabline#buffers_label = ''
 let g:airline#extensions#tabline#tabs_label = ''
 let g:airline_detect_spell = 0
-let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', ':%2v'])
+let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr'])
+
+" git blame alias
+command Gb Git blame
 
 " lsp auto input by tab
 let g:asyncomplete_auto_popup = 0
@@ -130,11 +128,13 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
 " lsp shortcut mapping
-nnoremap <buffer> gd :<C-u>LspDefinition<CR>
-nnoremap <buffer> gD :<C-u>LspReferences<CR>
+nnoremap gd :<C-u>LspDefinition<CR>
+nnoremap gD :<C-u>LspReferences<CR>
 command Rn LspRename
 command Lne LspNextError
 command Lnw LspNextWarning
+command Ldf LspDocumentFormat
+command Lca LspCodeAction
 
 " lsp preview window
 let g:lsp_preview_max_width = 60
@@ -144,8 +144,11 @@ let g:lsp_preview_max_height = 8
 let g:lsp_diagnostics_echo_cursor = 1
 let g:lsp_diagnostics_echo_delay = 175
 
+" lsp format timeout
+let g:lsp_format_sync_timeout = 1000
+
 " format file when save by lsp
-autocmd BufWritePre <buffer>,*.py LspDocumentFormatSync
+"autocmd BufWritePre <buffer>,*.py LspDocumentFormatSync
 
 " control+p setting
 " controlP open file in new tab
@@ -159,9 +162,15 @@ let g:ctrlp_custom_ignore = {
     \ }
 let g:ctrlp_match_window = 'order:ttb,min:8,max:8,results:100'
 let g:ctrlp_show_hidden = 1
+let g:ctrlp_max_files = 0
 let g:ctrlp_lazy_update = 200
 let g:ctrlp_open_multiple_files = 'tj'
 let g:ctrlp_types = ['fil']
+" if command fd is installed, use fd to speedup search
+if executable('fd')
+    let g:ctrlp_user_command = 'fd --type f --color never "" %s'
+    let g:ctrlp_use_caching = 0
+endif
 " enable ctrlP extension
 let g:ctrlp_extensions = ['funky']
 " ctrlP funky
@@ -172,3 +181,7 @@ let g:ctrlp_funky_use_cache = 1
 let g:indentLine_leadingSpaceChar = '-'
 let g:indentLine_leadingSpaceEnabled = '1'
 let g:indentLine_fileTypeExclude = ['json', 'text', 'markdown']
+
+" set highlight column at 80
+highlight ColorColumn ctermbg=1
+set colorcolumn=80
